@@ -11,6 +11,7 @@
 		C9C3917A2DCF17360055B690 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = C9C391792DCF17360055B690 /* RxRelay */; };
 		C9C3917C2DCF17360055B690 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C9C3917B2DCF17360055B690 /* RxSwift */; };
 		C9C3917F2DCF174C0055B690 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C9C3917E2DCF174C0055B690 /* SnapKit */; };
+		C9C394212DCF422D0055B690 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = C9C394202DCF422D0055B690 /* Then */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9C394212DCF422D0055B690 /* Then in Frameworks */,
 				C9C3917C2DCF17360055B690 /* RxSwift in Frameworks */,
 				C9C3917F2DCF174C0055B690 /* SnapKit in Frameworks */,
 				C9C3917A2DCF17360055B690 /* RxRelay in Frameworks */,
@@ -93,6 +95,7 @@
 				C9C391792DCF17360055B690 /* RxRelay */,
 				C9C3917B2DCF17360055B690 /* RxSwift */,
 				C9C3917E2DCF174C0055B690 /* SnapKit */,
+				C9C394202DCF422D0055B690 /* Then */,
 			);
 			productName = AppStoreClone;
 			productReference = C9C38D842DCDD1010055B690 /* AppStoreClone.app */;
@@ -125,6 +128,7 @@
 			packageReferences = (
 				C9C391762DCF17360055B690 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				C9C3917D2DCF174C0055B690 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				C9C3941F2DCF422D0055B690 /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C9C38D852DCDD1010055B690 /* Products */;
@@ -374,6 +378,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		C9C3941F2DCF422D0055B690 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -396,6 +408,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C9C3917D2DCF174C0055B690 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		C9C394202DCF422D0055B690 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C9C3941F2DCF422D0055B690 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
