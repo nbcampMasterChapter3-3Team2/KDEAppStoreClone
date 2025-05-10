@@ -1,5 +1,5 @@
 //
-//  SongRepository.swift
+//  DefaultSongRepository.swift
 //  AppStoreClone
 //
 //  Created by 곽다은 on 5/10/25.
@@ -7,6 +7,6 @@
 
 import Foundation
 
-final class SongRepository {
-    
+final class DefaultSongRepository {
+
 }

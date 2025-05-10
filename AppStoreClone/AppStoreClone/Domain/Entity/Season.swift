@@ -8,5 +8,8 @@
 import Foundation
 
 enum Season {
-
+    case spring
+    case summer
+    case autumn
+    case winter
 }
