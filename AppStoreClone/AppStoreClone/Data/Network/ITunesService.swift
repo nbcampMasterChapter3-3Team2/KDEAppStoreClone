@@ -8,17 +8,10 @@
 import Foundation
 import RxSwift
 
-enum ITunesServiceError: Error {
-    case invalidURL
-    case dataFetchFail
-    case decodeFail
-}
-
 final class ITunesService {
     let baseURL = "https://itunes.apple.com/search?"
 
     func fetchSongSearchResult(term: String) -> Single<[SongDTO]> {
-        let term = term.replacingOccurrences(of: " ", with: "+")
         let query = "media=music&entity=song&term=\(term)"
         let urlString = baseURL + query
 
@@ -32,24 +25,33 @@ final class ITunesService {
         return Single.create { observer in
             let session = URLSession(configuration: .default)
             session.dataTask(with: URLRequest(url: url)) { data, response, error in
-                if let error {
+                do {
+                    if let error { throw error }
+
+                    guard let data, let response = response as? HTTPURLResponse,
+                          (200..<300).contains(response.statusCode) else {
+                        throw ITunesServiceError.dataFetchFail
+                    }
+
+                    let decodedData = try JSONDecoder().decode(SongResponse.self, from: data)
+                    observer(.success(decodedData.results))
+                } catch let iTunesServiceError as ITunesServiceError {
+                    observer(.failure(iTunesServiceError))
+                    return
+                } catch {
                     observer(.failure(error))
-                }
-
-                guard let data, let response = response as? HTTPURLResponse else {
-                    observer(.failure(ITunesServiceError.dataFetchFail))
                     return
                 }
-
-                guard let decodedData = try? JSONDecoder().decode(SongResponse.self, from: data) else {
-                    observer(.failure(ITunesServiceError.decodeFail))
-                    return
-                }
-
-                observer(.success(decodedData.results))
             }.resume()
-            
             return Disposables.create()
         }
+    }
+}
+
+private extension ITunesService {
+    enum ITunesServiceError: Error {
+        case invalidURL
+        case dataFetchFail
+        case decodeFail
     }
 }

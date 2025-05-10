@@ -175,10 +175,16 @@ final class HomeView: UIView {
         let groupWidth = availableWidth * 0.84
         let groupHeight = groupWidth * 0.9
 
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .absolute(groupHeight))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(groupWidth),
+            heightDimension: .absolute(groupHeight)
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -191,16 +197,26 @@ final class HomeView: UIView {
 
     private func makeDefaultLayoutSection() -> NSCollectionLayoutSection {
         let cellHeight: CGFloat = 88
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(cellHeight))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(cellHeight)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.84), heightDimension: .estimated(cellHeight * 3))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, repeatingSubitem: item, count: 3)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.84),
+            heightDimension: .estimated(cellHeight * 3)
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            repeatingSubitem: item, count: 3
+        )
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
         section.interGroupSpacing = 16
         section.contentInsets = .init(top: 10, leading: 16, bottom: 40, trailing: 16)
+
         return section
     }
 }

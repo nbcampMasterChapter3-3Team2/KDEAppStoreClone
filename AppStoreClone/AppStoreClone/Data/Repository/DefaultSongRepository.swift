@@ -16,7 +16,8 @@ final class DefaultSongRepository: SongRepository {
     }
 
     func searchSong(season: Season) -> Single<[Song]> {
-        iTunesService.fetchSongSearchResult(term: season.queryTerm)
+        let term = season.queryTerm.replacingOccurrences(of: " ", with: "+")
+        return iTunesService.fetchSongSearchResult(term: term)
             .map { $0.map(SongMapper.map) }
     }
 }
