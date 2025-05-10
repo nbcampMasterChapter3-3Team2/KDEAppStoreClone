@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Season {
+enum Season: CaseIterable, Hashable {
     case spring
     case summer
     case autumn

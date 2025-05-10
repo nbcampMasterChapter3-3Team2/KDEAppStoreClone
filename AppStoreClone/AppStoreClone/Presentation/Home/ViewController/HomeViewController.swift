@@ -6,8 +6,17 @@
 //
 
 import UIKit
+import RxSwift
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
+
+    private let disposeBag = DisposeBag()
+
+    private let homeView = HomeView()
+
+    override func loadView() {
+        view = homeView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

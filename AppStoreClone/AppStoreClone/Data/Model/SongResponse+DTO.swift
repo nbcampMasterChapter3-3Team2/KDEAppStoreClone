@@ -15,10 +15,12 @@ struct SongDTO: Decodable {
     let trackName: String
     let artistName: String
     let artworkURL: String
+    let collectionName: String
 
     enum CodingKeys: String, CodingKey {
         case trackName
         case artistName
         case artworkURL = "artworkUrl30"
+        case collectionName
     }
 }

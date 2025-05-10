@@ -12,6 +12,7 @@ struct SongMapper {
         let title = dto.trackName
         let artist = dto.artistName
         let artworkURL = dto.artworkURL
-        return Song(title: title, artist: artist, artworkURL: artworkURL)
+        let album = dto.collectionName
+        return Song(title: title, artist: artist, artworkImageURL: artworkURL, album: album)
     }
 }

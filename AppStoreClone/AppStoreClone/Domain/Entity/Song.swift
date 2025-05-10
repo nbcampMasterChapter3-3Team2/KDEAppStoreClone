@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Song {
+struct Song: Hashable {
     let title: String
     let artist: String
-    let artworkURL: String
+    let artworkImageURL: String
+    let album: String
 }
