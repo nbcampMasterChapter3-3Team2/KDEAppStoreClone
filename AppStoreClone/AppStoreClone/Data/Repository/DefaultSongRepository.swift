@@ -6,7 +6,17 @@
 //
 
 import Foundation
+import RxSwift
 
-final class DefaultSongRepository {
+final class DefaultSongRepository: SongRepository {
+    let iTunesService: ITunesService
 
+    init(iTunesService: ITunesService) {
+        self.iTunesService = iTunesService
+    }
+
+    func searchSong(season: Season) -> Single<[Song]> {
+        iTunesService.fetchSongSearchResult(term: season.queryTerm)
+            .map { $0.map(SongMapper.map) }
+    }
 }

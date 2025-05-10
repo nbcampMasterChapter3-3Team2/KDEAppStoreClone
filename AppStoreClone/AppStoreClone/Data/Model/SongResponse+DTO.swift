@@ -8,9 +8,17 @@
 import Foundation
 
 struct SongResponse: Decodable {
-
+    let results: [SongDTO]
 }
 
 struct SongDTO: Decodable {
+    let trackName: String
+    let artistName: String
+    let artworkURL: String
 
+    enum CodingKeys: String, CodingKey {
+        case trackName
+        case artistName
+        case artworkURL = "artworkUrl30"
+    }
 }

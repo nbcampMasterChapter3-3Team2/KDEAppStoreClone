@@ -16,7 +16,6 @@ final class FetchSeasonSongUseCase {
     }
 
     func execute(season: Season) -> Observable<[Song]> {
-        songRepository.searchSong(season: season)
-            .asObservable()
+        songRepository.searchSong(season: season).asObservable()
     }
 }
