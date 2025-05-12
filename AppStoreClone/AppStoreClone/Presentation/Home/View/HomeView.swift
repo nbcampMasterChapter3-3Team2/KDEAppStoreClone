@@ -219,4 +219,11 @@ final class HomeView: UIView {
 
         return section
     }
+
+    func updateSnapshot(with items: [Song], toSection section: Season) {
+        guard var snapshot = dataSource?.snapshot(for: section) else { return }
+        snapshot.deleteAll()
+        snapshot.append(items)
+        dataSource?.apply(snapshot, to: section)
+    }
 }
