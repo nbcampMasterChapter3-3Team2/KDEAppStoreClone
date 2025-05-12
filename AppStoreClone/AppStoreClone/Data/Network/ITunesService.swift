@@ -11,8 +11,8 @@ import RxSwift
 final class ITunesService {
     let baseURL = "https://itunes.apple.com/search?"
 
-    func fetchSongSearchResult(term: String) -> Single<[SongDTO]> {
-        let query = "media=music&entity=song&term=\(term)"
+    func fetchSongSearchResult(term: String, limit: Int) -> Single<[SongDTO]> {
+        let query = "media=music&entity=song&genreId=51&term=\(term)&limit=\(limit)"
         let urlString = baseURL + query
 
         guard let url = URL(string: urlString) else {
@@ -23,26 +23,15 @@ final class ITunesService {
         }
 
         return Single.create { observer in
-            let session = URLSession(configuration: .default)
-            session.dataTask(with: URLRequest(url: url)) { data, response, error in
+            Task {
                 do {
-                    if let error { throw error }
-
-                    guard let data, let response = response as? HTTPURLResponse,
-                          (200..<300).contains(response.statusCode) else {
-                        throw ITunesServiceError.dataFetchFail
-                    }
-
+                    let (data, _) = try await URLSession.shared.data(from: url)
                     let decodedData = try JSONDecoder().decode(SongResponse.self, from: data)
                     observer(.success(decodedData.results))
-                } catch let iTunesServiceError as ITunesServiceError {
-                    observer(.failure(iTunesServiceError))
-                    return
                 } catch {
                     observer(.failure(error))
-                    return
                 }
-            }.resume()
+            }
             return Disposables.create()
         }
     }
@@ -51,7 +40,5 @@ final class ITunesService {
 private extension ITunesService {
     enum ITunesServiceError: Error {
         case invalidURL
-        case dataFetchFail
-        case decodeFail
     }
 }

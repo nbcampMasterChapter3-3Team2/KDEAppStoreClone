@@ -11,13 +11,20 @@ extension Season {
     var queryTerm: String {
         switch self {
         case .spring:
-            return "spring"
+            return "spring+봄"
         case .summer:
-            return "summer"
+            return "summer+여름"
         case .autumn:
-            return "autumn"
+            return "autumn+가을"
         case .winter:
-            return "winter"
+            return "winter+겨울"
+        }
+    }
+
+    var resultLimit: Int {
+        switch self {
+        case .spring: return 5
+        default: return 20
         }
     }
 }
