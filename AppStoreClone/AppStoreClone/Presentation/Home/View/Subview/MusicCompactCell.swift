@@ -8,8 +8,13 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
 
 final class MusicCompactCell: UICollectionViewCell {
+
+    // MARK: - Properties
+
+    private var disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
@@ -17,6 +22,7 @@ final class MusicCompactCell: UICollectionViewCell {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
+        $0.backgroundColor = .quaternarySystemFill
     }
 
     private let stackView = UIStackView().then {
@@ -92,14 +98,20 @@ final class MusicCompactCell: UICollectionViewCell {
 
     // MARK: - Methods
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
+
     func updateCell(
         with title: String,
         _ artist: String,
         _ artworkImageURL: String,
         _ album: String
     ) {
-        // TODO: 이미지 로드
-        artworkImageView.backgroundColor = .cyan.withAlphaComponent(0.3)
+        Task {
+            artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
+        }
         songTitleLabel.text = title
         artistLabel.text = artist
         albumLabel.text = album

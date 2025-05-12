@@ -8,8 +8,13 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
 
 final class MusicBannerCell: UICollectionViewCell {
+
+    // MARK: - Properties
+
+    private var disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
@@ -80,10 +85,16 @@ final class MusicBannerCell: UICollectionViewCell {
     }
 
     // MARK: - Methods
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
 
     func updateCell(with title: String, _ artist: String, _ artworkImageURL: String) {
-        // TODO: 앨범 이미지 로드
-        artworkImageView.backgroundColor = .cyan.withAlphaComponent(0.3)
+        Task {
+            artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
+        }
         songTitleLabel.text = title
         artistLabel.text = artist
     }

@@ -36,6 +36,8 @@ final class HomeViewModel: ViewModelProtocol {
         bindActions()
     }
 
+    // MARK: - Methods
+
     func bindActions() {
         action.bind { [weak self] action in
             switch action {

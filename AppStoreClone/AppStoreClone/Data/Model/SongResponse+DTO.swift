@@ -20,7 +20,7 @@ struct SongDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case trackName
         case artistName
-        case artworkURL = "artworkUrl30"
+        case artworkURL = "artworkUrl100"
         case collectionName
     }
 }
