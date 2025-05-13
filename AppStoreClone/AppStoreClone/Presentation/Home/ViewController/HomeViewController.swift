@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 
 final class HomeViewController: UIViewController {
-
     // MARK: - Properties
 
     private let viewModel: HomeViewModel
@@ -18,6 +17,9 @@ final class HomeViewController: UIViewController {
 
     // MARK: - UI Components
 
+    private let searchController = UISearchController(
+        searchResultsController: SearchResultViewController()
+    )
     private let homeView = HomeView()
 
     // MARK: - Init, Deinit, required
@@ -25,7 +27,6 @@ final class HomeViewController: UIViewController {
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        bind()
     }
 
     required init?(coder: NSCoder) {
@@ -40,12 +41,29 @@ final class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.action.accept(.viewDidLoad)
+        setStyle()
+        setSearchController()
+        bind()
+    }
+
+    // MARK: - Set Style
+
+    private func setStyle() {
+        title = "Music"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+    // MARK: - Set SearchController
+    private func setSearchController() {
+        self.navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
     }
 
     // MARK: - Bind
 
     private func bind() {
+        viewModel.action.accept(.viewDidLoad)
+
         viewModel.state.springSong
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, songs in
@@ -73,5 +91,11 @@ final class HomeViewController: UIViewController {
                 owner.homeView.updateSnapshot(with: songs, toSection: .winter)
             }
             .disposed(by: disposeBag)
+    }
+}
+
+extension HomeViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        searchController.showsSearchResultsController = true
     }
 }

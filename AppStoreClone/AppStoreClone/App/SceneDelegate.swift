@@ -20,9 +20,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let service = ITunesService()
         let repository = DefaultSearchRepository(iTunesService: service)
-        let useCase = FetchSeasonSongUseCase(songRepository: repository)
+        let useCase = FetchSeasonSongUseCase(repository: repository)
         let viewModel = HomeViewModel(fetchSeasonSongUseCase: useCase)
-        window?.rootViewController = HomeViewController(viewModel: viewModel)
+        let homeViewController = HomeViewController(viewModel: viewModel)
+        let navigationController = UINavigationController(rootViewController: homeViewController)
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 }
