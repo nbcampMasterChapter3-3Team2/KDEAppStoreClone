@@ -9,13 +9,13 @@ import Foundation
 import RxSwift
 
 final class FetchSeasonSongUseCase {
-    let songRepository: SongRepository
+    let repository: SearchRepository
 
-    init(songRepository: SongRepository) {
-        self.songRepository = songRepository
+    init(repository: SearchRepository) {
+        self.repository = repository
     }
 
     func execute(season: Season) -> Observable<[Song]> {
-        songRepository.searchSong(season: season).asObservable()
+        repository.searchSong(season: season).asObservable()
     }
 }

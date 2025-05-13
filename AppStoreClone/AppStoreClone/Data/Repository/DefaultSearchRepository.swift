@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class DefaultSongRepository: SongRepository {
+final class DefaultSearchRepository: SearchRepository {
     let iTunesService: ITunesService
 
     init(iTunesService: ITunesService) {

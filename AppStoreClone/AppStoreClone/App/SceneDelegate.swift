@@ -19,7 +19,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
         let service = ITunesService()
-        let repository = DefaultSongRepository(iTunesService: service)
+        let repository = DefaultSearchRepository(iTunesService: service)
         let useCase = FetchSeasonSongUseCase(songRepository: repository)
         let viewModel = HomeViewModel(fetchSeasonSongUseCase: useCase)
         window?.rootViewController = HomeViewController(viewModel: viewModel)
