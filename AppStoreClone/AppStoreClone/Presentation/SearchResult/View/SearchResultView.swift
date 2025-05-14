@@ -89,13 +89,6 @@ final class SearchResultView: UIView {
 
         var snapshot = NSDiffableDataSourceSnapshot<SearchResultSection, Show>()
         snapshot.appendSections(SearchResultSection.allCases)
-        snapshot.appendItems([
-            Show(kind: .movie, title: "dsa", artist: "dsa", artworkImageURL: "sd", genre: "dsa", releaseDate: Date()),
-            Show(kind: .movie, title: "dsa1", artist: "dsa", artworkImageURL: "sd", genre: "dsa", releaseDate: Date()),
-            Show(kind: .movie, title: "dsa2", artist: "dsa", artworkImageURL: "sd", genre: "dsa", releaseDate: Date()),
-            Show(kind: .movie, title: "dsa3", artist: "dsa", artworkImageURL: "sd", genre: "dsa", releaseDate: Date()),
-            Show(kind: .movie, title: "dsa4", artist: "dsa", artworkImageURL: "sd", genre: "dsa", releaseDate: Date())
-        ], toSection: .show)
         dataSource?.apply(snapshot)
     }
 

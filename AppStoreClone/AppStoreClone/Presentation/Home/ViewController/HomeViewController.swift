@@ -15,7 +15,11 @@ final class HomeViewController: UIViewController {
 
     private let viewModel: HomeViewModel
     private let disposeBag = DisposeBag()
-    private let searchResultViewController = SearchResultViewController()
+
+    private let searchRepository = DefaultSearchRepository(iTunesService: ITunesService())
+    private lazy var fetchShowUseCase = FetchShowUseCase(repository: searchRepository)
+    private lazy var searchResultViewModel = SearchResultViewModel(fetchShowUseCase: fetchShowUseCase)
+    private lazy var searchResultViewController = SearchResultViewController(viewModel: searchResultViewModel)
 
     // MARK: - UI Components
 
@@ -99,6 +103,8 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        searchController.showsSearchResultsController = true
+        guard let query = searchController.searchBar.text else { return }
+        searchController.showsSearchResultsController = !query.isEmpty
+        searchResultViewController.updateQuery(query)
     }
 }
