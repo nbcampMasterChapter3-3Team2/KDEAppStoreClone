@@ -12,7 +12,7 @@ struct ShowMapper {
         let kind: ShowKind = dto.kind == "podcast" ? .podcast : .movie
         let title = dto.trackName
         let artist = dto.artistName
-        let artworkURL = dto.artworkURL
+        let artworkImageURL = dto.artworkImageURL
         let genre = dto.primaryGenreName
 
         let isoFormatter = ISO8601DateFormatter()
@@ -22,7 +22,7 @@ struct ShowMapper {
             kind: kind,
             title: title,
             artist: artist,
-            artworkURL: artworkURL,
+            artworkImageURL: artworkImageURL,
             genre: genre,
             releaseDate: date
         )

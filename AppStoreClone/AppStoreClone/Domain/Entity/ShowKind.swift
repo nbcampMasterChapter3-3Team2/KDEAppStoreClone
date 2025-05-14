@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ShowKind {
+enum ShowKind: CaseIterable, Hashable {
     case movie
     case podcast
 }

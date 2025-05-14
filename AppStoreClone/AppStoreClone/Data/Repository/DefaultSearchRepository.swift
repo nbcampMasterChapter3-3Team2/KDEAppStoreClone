@@ -30,5 +30,4 @@ final class DefaultSearchRepository: SearchRepository {
             (movies + podcasts).sorted { $0.releaseDate > $1.releaseDate }
         }
     }
-
 }

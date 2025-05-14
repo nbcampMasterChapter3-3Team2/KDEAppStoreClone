@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Show {
+struct Show: Hashable {
     let kind: ShowKind
     let title: String
     let artist: String
-    let artworkURL: String
+    let artworkImageURL: String
     let genre: String
     let releaseDate: Date
 }

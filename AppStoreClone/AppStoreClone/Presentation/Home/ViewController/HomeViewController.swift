@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Then
 import RxSwift
 import RxCocoa
 
@@ -14,12 +15,14 @@ final class HomeViewController: UIViewController {
 
     private let viewModel: HomeViewModel
     private let disposeBag = DisposeBag()
+    private let searchResultViewController = SearchResultViewController()
 
     // MARK: - UI Components
 
-    private let searchController = UISearchController(
-        searchResultsController: SearchResultViewController()
-    )
+    private lazy var searchController = UISearchController(searchResultsController: searchResultViewController).then {
+        $0.searchBar.placeholder = "영화, 팟캐스트"
+        $0.searchResultsUpdater = self
+    }
     private let homeView = HomeView()
 
     // MARK: - Init, Deinit, required
@@ -56,7 +59,7 @@ final class HomeViewController: UIViewController {
     // MARK: - Set SearchController
     private func setSearchController() {
         self.navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = self
+        self.navigationItem.hidesSearchBarWhenScrolling = false
     }
 
     // MARK: - Bind

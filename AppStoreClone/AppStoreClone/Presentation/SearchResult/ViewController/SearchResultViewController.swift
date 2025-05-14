@@ -8,8 +8,14 @@
 import UIKit
 
 final class SearchResultViewController: UIViewController {
+
+    private let searchResultView = SearchResultView()
+
+    override func loadView() {
+        view = searchResultView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .cyan.withAlphaComponent(0.3)
     }
 }

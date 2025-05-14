@@ -42,6 +42,7 @@ final class HomeViewModel: ViewModelProtocol {
         action.bind { [weak self] action in
             switch action {
             case .viewDidLoad:
+                // TODO: observable들을 반환하는 메서드로 변경해서 concat으로 묶기
                 self?.fetchSpringSong()
                 self?.fetchSummerSong()
                 self?.fetchAutumnSong()

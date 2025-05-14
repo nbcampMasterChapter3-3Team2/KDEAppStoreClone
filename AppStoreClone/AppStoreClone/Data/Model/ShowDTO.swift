@@ -11,7 +11,7 @@ struct ShowDTO: Decodable {
     let kind: String
     let trackName: String
     let artistName: String
-    let artworkURL: String
+    let artworkImageURL: String
     let primaryGenreName: String
     let releaseDate: String
 
@@ -19,7 +19,7 @@ struct ShowDTO: Decodable {
         case kind
         case trackName
         case artistName
-        case artworkURL = "artworkUrl30"
+        case artworkImageURL = "artworkUrl30"
         case primaryGenreName
         case releaseDate
     }

@@ -1,5 +1,5 @@
 //
-//  SectionHeader.swift
+//  MusicHeader.swift
 //  AppStoreClone
 //
 //  Created by 곽다은 on 5/11/25.
@@ -9,13 +9,13 @@ import UIKit
 import SnapKit
 import Then
 
-final class SectionHeader: UICollectionReusableView {
+final class MusicHeader: UICollectionReusableView {
 
     // MARK: - UIComponents
 
     private let titleLabel = UILabel().then {
         $0.textColor = .label
-        $0.font = .systemFont(ofSize: 20, weight: .heavy)
+        $0.font = .systemFont(ofSize: 20, weight: .bold)
     }
 
     private let descriptionLabel = UILabel().then {
