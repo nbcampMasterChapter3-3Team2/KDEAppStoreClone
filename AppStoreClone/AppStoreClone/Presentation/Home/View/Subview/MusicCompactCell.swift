@@ -100,14 +100,15 @@ final class MusicCompactCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        updateCell(with: nil, nil, nil, nil)
         disposeBag = DisposeBag()
     }
 
     func updateCell(
-        with title: String,
-        _ artist: String,
-        _ artworkImageURL: String,
-        _ album: String
+        with title: String?,
+        _ artist: String?,
+        _ artworkImageURL: String?,
+        _ album: String?
     ) {
         Task {
             artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)

@@ -75,7 +75,8 @@ final class SearchResultView: UIView {
                     for: indexPath
                 ) as! ShowCell
 
-                cell.updateCell(with: show.title, show.artist, show.artworkImageURL, backgroundColor: show.color)
+                let kind = show.kind == .movie ? "Movie" : "Podcast"
+                cell.updateCell(with: show.title, kind, show.artworkImageURL, backgroundColor: show.color)
 
                 return cell
             })
