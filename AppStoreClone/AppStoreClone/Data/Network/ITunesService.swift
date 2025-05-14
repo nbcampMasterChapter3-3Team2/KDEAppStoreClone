@@ -11,9 +11,8 @@ import RxSwift
 final class ITunesService {
     let baseURL = "https://itunes.apple.com/search?"
 
-    func fetchSongSearchResult(term: String, limit: Int) -> Single<[SongDTO]> {
-        let query = "media=music&entity=song&genreId=51&term=\(term)&limit=\(limit)"
-        let urlString = baseURL + query
+    func fetch<T: Decodable>(type: SearchMediaType) -> Single<[T]> {
+        let urlString = baseURL + type.query
 
         guard let url = URL(string: urlString) else {
             return Single.create { observer in
@@ -26,7 +25,7 @@ final class ITunesService {
             Task {
                 do {
                     let (data, _) = try await URLSession.shared.data(from: url)
-                    let decodedData = try JSONDecoder().decode(SongResponse.self, from: data)
+                    let decodedData = try JSONDecoder().decode(SearchResponse<T>.self, from: data)
                     observer(.success(decodedData.results))
                 } catch {
                     observer(.failure(error))

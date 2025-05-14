@@ -10,5 +10,5 @@ import RxSwift
 
 protocol SearchRepository {
     func searchSong(season: Season) -> Single<[Song]>
-    func searchShow(by searchQuery: String) -> Single<[Show]>
+    func searchShow(by term: String) -> Single<[Show]>
 }

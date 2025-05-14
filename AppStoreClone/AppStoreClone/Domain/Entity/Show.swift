@@ -10,8 +10,8 @@ import Foundation
 struct Show {
     let kind: ShowKind
     let title: String
-    let collection: String
     let artist: String
     let artworkURL: String
     let genre: String
+    let releaseDate: Date
 }

@@ -16,8 +16,19 @@ final class DefaultSearchRepository: SearchRepository {
     }
 
     func searchSong(season: Season) -> Single<[Song]> {
-        let term = season.queryTerm.replacingOccurrences(of: " ", with: "+")
-        return iTunesService.fetchSongSearchResult(term: term, limit: season.resultLimit)
+        return iTunesService.fetch(type: .music(season))
             .map { $0.map(SongMapper.map) }
     }
+
+    func searchShow(by term: String) -> Single<[Show]> {
+        let movie = iTunesService.fetch(type: .movie(term))
+            .map { $0.compactMap(ShowMapper.map)}
+        let podcast = iTunesService.fetch(type: .podcast(term))
+            .map { $0.compactMap(ShowMapper.map)}
+
+        return Single.zip(movie, podcast).map { movies, podcasts in
+            (movies + podcasts).sorted { $0.releaseDate > $1.releaseDate }
+        }
+    }
+
 }
