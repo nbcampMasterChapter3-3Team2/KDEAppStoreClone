@@ -19,6 +19,7 @@ final class SearchResultView: UIView {
         frame: .zero,
         collectionViewLayout: createCollectionViewLayout()
     ).then {
+        $0.keyboardDismissMode = .onDrag
         $0.register(ShowCell.self,forCellWithReuseIdentifier: ShowCell.identifier)
         $0.register(
             SearchResultHeader.self,

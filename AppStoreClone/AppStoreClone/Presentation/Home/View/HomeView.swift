@@ -21,6 +21,7 @@ final class HomeView: UIView {
         frame: .zero,
         collectionViewLayout: createCollectionViewLayout()
     ).then {
+        $0.keyboardDismissMode = .onDrag
         $0.register(
             MusicBannerCell.self,
             forCellWithReuseIdentifier: MusicBannerCell.identifier

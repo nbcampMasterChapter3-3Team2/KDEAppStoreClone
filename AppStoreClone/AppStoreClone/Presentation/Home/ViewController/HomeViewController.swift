@@ -16,6 +16,7 @@ final class HomeViewController: UIViewController {
     private let viewModel: HomeViewModel
     private let disposeBag = DisposeBag()
 
+    // TODO: DIContainer 구현
     private let searchRepository = DefaultSearchRepository(iTunesService: ITunesService())
     private lazy var fetchShowUseCase = FetchShowUseCase(repository: searchRepository)
     private lazy var searchResultViewModel = SearchResultViewModel(fetchShowUseCase: fetchShowUseCase)
