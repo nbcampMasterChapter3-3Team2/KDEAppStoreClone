@@ -17,7 +17,12 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = ViewController()
+
+        let service = ITunesService()
+        let repository = DefaultSongRepository(iTunesService: service)
+        let useCase = FetchSeasonSongUseCase(songRepository: repository)
+        let viewModel = HomeViewModel(fetchSeasonSongUseCase: useCase)
+        window?.rootViewController = HomeViewController(viewModel: viewModel)
         window?.makeKeyAndVisible()
     }
 }
