@@ -8,14 +8,22 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxRelay
 
 final class SearchResultHeader: UICollectionReusableView {
+
+    // MARK: - Properties
+
+    let didTapTitle = PublishRelay<Void>()
+    var disposeBag = DisposeBag()
 
     // MARK: - UIComponents
 
     private let titleLabel = UILabel().then {
         $0.textColor = .label
         $0.font = .systemFont(ofSize: 36, weight: .bold)
+        $0.isUserInteractionEnabled = true
     }
 
     // MARK: - Init, Deinit, required
@@ -24,6 +32,7 @@ final class SearchResultHeader: UICollectionReusableView {
         super.init(frame: frame)
         setHierarchy()
         setConstraints()
+        bind()
     }
 
     required init?(coder: NSCoder) {
@@ -38,6 +47,13 @@ final class SearchResultHeader: UICollectionReusableView {
         ].forEach { addSubview($0) }
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        updateHeader(nil)
+        disposeBag = DisposeBag()
+        bind()
+    }
+
     // MARK: - Constraints Helper
 
     private func setConstraints() {
@@ -49,7 +65,18 @@ final class SearchResultHeader: UICollectionReusableView {
 
     // MARK: - Methods
 
-    func updateHeader(_ title: String) {
+    private func bind() {
+        let tapGesture = UITapGestureRecognizer()
+        titleLabel.addGestureRecognizer(tapGesture)
+
+        tapGesture.rx.event
+            .bind(onNext: { [weak self] _ in
+                self?.didTapTitle.accept(())
+            })
+            .disposed(by: disposeBag)
+    }
+
+    func updateHeader(_ title: String?) {
         titleLabel.text = title
     }
 }

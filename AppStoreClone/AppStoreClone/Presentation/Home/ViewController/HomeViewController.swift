@@ -99,6 +99,13 @@ final class HomeViewController: UIViewController {
                 owner.homeView.updateSnapshot(with: songs, toSection: .winter)
             }
             .disposed(by: disposeBag)
+
+        searchResultViewController.didTapHeader
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(with: self) { owner, _ in
+                owner.searchController.isActive = false
+            }
+            .disposed(by: disposeBag)
     }
 }
 

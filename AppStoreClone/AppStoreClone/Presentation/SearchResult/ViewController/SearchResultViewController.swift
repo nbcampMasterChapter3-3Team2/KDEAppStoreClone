@@ -14,6 +14,7 @@ final class SearchResultViewController: UIViewController {
     // MARK: - Properties
 
     private let viewModel: SearchResultViewModel
+    let didTapHeader = PublishRelay<Void>()
     private let disposeBag = DisposeBag()
 
     // MARK: - UI Components
@@ -56,6 +57,12 @@ final class SearchResultViewController: UIViewController {
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, shows in
                 owner.searchResultView.updateSnapshot(with: shows, toSection: .show)
+            }
+            .disposed(by: disposeBag)
+
+        searchResultView.didTapHeader
+            .subscribe { [weak self] _ in
+                self?.didTapHeader.accept(())
             }
             .disposed(by: disposeBag)
     }

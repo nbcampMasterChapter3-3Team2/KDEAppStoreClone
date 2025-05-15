@@ -14,6 +14,7 @@ final class SearchResultView: UIView {
     // MARK: - Properties
 
     let headerTitle = BehaviorRelay<String>(value: "")
+    let didTapHeader = PublishRelay<Void>()
     private let disposeBag = DisposeBag()
     private var dataSource: UICollectionViewDiffableDataSource<SearchResultSection, Show>?
 
@@ -95,6 +96,12 @@ final class SearchResultView: UIView {
                     header.updateHeader(query)
                 }
                 .disposed(by: disposeBag)
+
+            header.didTapTitle
+                .subscribe { _ in
+                    self.didTapHeader.accept(())
+                }
+                .disposed(by: header.disposeBag)
 
             return header
         }
