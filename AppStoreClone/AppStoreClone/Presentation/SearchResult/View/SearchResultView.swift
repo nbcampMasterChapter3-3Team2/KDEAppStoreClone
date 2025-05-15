@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
 
 final class SearchResultView: UIView {
 
     // MARK: - Properties
 
+    let headerTitle = BehaviorRelay<String>(value: "")
+    private let disposeBag = DisposeBag()
     private var dataSource: UICollectionViewDiffableDataSource<SearchResultSection, Show>?
 
     // MARK: - UI Components
@@ -81,10 +85,16 @@ final class SearchResultView: UIView {
                 return cell
             })
 
-        dataSource?.supplementaryViewProvider = { collectionView, kind, indexPath in
+        dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+            guard let self else { return nil }
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchResultHeader.identifier, for: indexPath) as! SearchResultHeader
 
-            header.updateHeader("Hello")
+            headerTitle
+                .asDriver(onErrorDriveWith: .empty())
+                .drive(with: self) { owner, query in
+                    header.updateHeader(query)
+                }
+                .disposed(by: disposeBag)
 
             return header
         }

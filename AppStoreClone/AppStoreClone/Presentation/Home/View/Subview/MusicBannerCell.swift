@@ -93,6 +93,7 @@ final class MusicBannerCell: UICollectionViewCell {
     }
 
     func updateCell(with title: String?, _ artist: String?, _ artworkImageURL: String?) {
+        guard let artworkImageURL else { return }
         Task {
             artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
         }

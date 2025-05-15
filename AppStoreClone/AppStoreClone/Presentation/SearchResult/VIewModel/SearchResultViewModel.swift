@@ -15,6 +15,7 @@ final class SearchResultViewModel: ViewModelProtocol {
     }
 
     struct State {
+        let searchKeyword = BehaviorRelay<String>(value: "")
         let show = BehaviorRelay<[Show]>(value: [])
     }
 
@@ -38,10 +39,15 @@ final class SearchResultViewModel: ViewModelProtocol {
         action.bind { [weak self] action in
             switch action {
             case .didQueryChanged(let query):
+                self?.setSearchKeyword(for: query)
                 self?.fetchShow(by: query)
             }
         }
         .disposed(by: disposeBag)
+    }
+
+    private func setSearchKeyword(for keyword: String) {
+        state.searchKeyword.accept(keyword)
     }
 
     private func fetchShow(by query: String) {
