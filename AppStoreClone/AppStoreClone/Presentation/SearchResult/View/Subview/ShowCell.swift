@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 import RxSwift
+import RxCocoa
 
 final class ShowCell: UICollectionViewCell {
 
@@ -111,8 +112,12 @@ final class ShowCell: UICollectionViewCell {
             artworkImageView.image = nil
             return
         }
-        imageLoadTask = Task {
-            artworkImageView.image = await ImageLoader.shared.loadImage(from: url)
-        }
+        ImageLoader.shared.loadImage(from: url)
+            .asObservable()
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(with: self) { owner, image in
+                owner.artworkImageView.image = image
+            }
+            .disposed(by: disposeBag)
     }
 }
