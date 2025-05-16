@@ -14,7 +14,7 @@ struct ShowDTO: Decodable {
     let artworkImageURL: String
     let primaryGenreName: String
     let releaseDate: String
-    let webViewURL: String
+    let webViewURL: String?
 
     enum CodingKeys: String, CodingKey {
         case kind

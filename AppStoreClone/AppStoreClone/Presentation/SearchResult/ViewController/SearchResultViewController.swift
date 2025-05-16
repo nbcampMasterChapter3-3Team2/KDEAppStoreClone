@@ -46,6 +46,13 @@ final class SearchResultViewController: UIViewController {
     // MARK: - Bind
 
     private func bind() {
+        searchResultView.didSelectedCell
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(with: self) { owner, index in
+                owner.viewModel.action.accept(.didSelectCell(index))
+            }
+            .disposed(by: disposeBag)
+
         viewModel.state.searchKeyword
             .bind(with: self) { owner, keyword in
                 owner.searchResultView.headerTitle.accept(keyword)
@@ -57,6 +64,13 @@ final class SearchResultViewController: UIViewController {
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, shows in
                 owner.searchResultView.updateSnapshot(with: shows, toSection: .show)
+            }
+            .disposed(by: disposeBag)
+
+        viewModel.state.selectedShowURL
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(with: self) { owner, url in
+                owner.present(DetailViewController(url: url), animated: true)
             }
             .disposed(by: disposeBag)
 

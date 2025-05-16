@@ -15,6 +15,7 @@ final class SearchResultView: UIView {
 
     let headerTitle = BehaviorRelay<String>(value: "")
     let didTapHeader = PublishRelay<Void>()
+    let didSelectedCell = PublishRelay<Int>()
     private let disposeBag = DisposeBag()
     private var dataSource: UICollectionViewDiffableDataSource<SearchResultSection, Show>?
 
@@ -40,6 +41,7 @@ final class SearchResultView: UIView {
         setStyle()
         setHierarchy()
         setConstraints()
+        bind()
         setDataSource()
     }
 
@@ -67,6 +69,16 @@ final class SearchResultView: UIView {
         collectionView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()
         }
+    }
+
+    // MARK: - Bind
+
+    private func bind() {
+        collectionView.rx.itemSelected
+            .subscribe { [weak self] indexPath in
+                self?.didSelectedCell.accept(indexPath.item)
+            }
+            .disposed(by: disposeBag)
     }
 
     // MARK: - DataSource Helper
