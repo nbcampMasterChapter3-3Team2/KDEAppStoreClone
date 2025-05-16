@@ -12,4 +12,5 @@ struct Song: Hashable {
     let artist: String
     let artworkImageURL: String
     let album: String
+    let detailViewURL: String?
 }

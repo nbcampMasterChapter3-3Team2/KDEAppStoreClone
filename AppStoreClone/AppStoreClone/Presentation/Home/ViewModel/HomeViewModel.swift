@@ -13,6 +13,7 @@ final class HomeViewModel: ViewModelProtocol {
 
     enum Action {
         case viewDidLoad
+        case didSelectedSong(IndexPath)
     }
 
     struct State {
@@ -20,6 +21,7 @@ final class HomeViewModel: ViewModelProtocol {
         let summerSong = BehaviorRelay<[Song]>(value: [])
         let autumnSong = BehaviorRelay<[Song]>(value: [])
         let winterSong = BehaviorRelay<[Song]>(value: [])
+        let selectedSong = PublishRelay<URL>()
     }
 
     // MARK: - Properties
@@ -43,6 +45,8 @@ final class HomeViewModel: ViewModelProtocol {
             switch action {
             case .viewDidLoad:
                 self?.fetchAllSeasonSong()
+            case .didSelectedSong(let indexPath):
+                self?.getSelectedSongDetailViewURL(indexPath: indexPath)
             }
         }
         .disposed(by: disposeBag)
@@ -65,5 +69,19 @@ final class HomeViewModel: ViewModelProtocol {
             }
         }
         .disposed(by: disposeBag)
+    }
+
+    private func getSelectedSongDetailViewURL(indexPath: IndexPath) {
+        let season = Season.allCases[indexPath.section]
+        let song: Song?
+        switch season {
+        case .spring: song = state.springSong.value[indexPath.item]
+        case .summer: song = state.summerSong.value[indexPath.item]
+        case .autumn: song = state.autumnSong.value[indexPath.item]
+        case .winter: song = state.winterSong.value[indexPath.item]
+        }
+        guard let song else { return }
+        guard let urlString = song.detailViewURL, let url = URL(string: urlString) else { return }
+        state.selectedSong.accept(url)
     }
 }
