@@ -88,10 +88,12 @@ final class MusicBannerCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        updateCell(with: nil, nil, nil)
         disposeBag = DisposeBag()
     }
 
-    func updateCell(with title: String, _ artist: String, _ artworkImageURL: String) {
+    func updateCell(with title: String?, _ artist: String?, _ artworkImageURL: String?) {
+        guard let artworkImageURL else { return }
         Task {
             artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
         }

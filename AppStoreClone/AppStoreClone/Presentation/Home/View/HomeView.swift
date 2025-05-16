@@ -21,6 +21,7 @@ final class HomeView: UIView {
         frame: .zero,
         collectionViewLayout: createCollectionViewLayout()
     ).then {
+        $0.keyboardDismissMode = .onDrag
         $0.register(
             MusicBannerCell.self,
             forCellWithReuseIdentifier: MusicBannerCell.identifier
@@ -30,9 +31,9 @@ final class HomeView: UIView {
             forCellWithReuseIdentifier: MusicCompactCell.identifier
         )
         $0.register(
-            SectionHeader.self,
+            MusicHeader.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SectionHeader.identifier
+            withReuseIdentifier: MusicHeader.identifier
         )
     }
 
@@ -68,8 +69,7 @@ final class HomeView: UIView {
 
     private func setConstraints() {
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide).inset(16)
-            $0.directionalHorizontalEdges.bottom.equalToSuperview()
+            $0.directionalEdges.equalToSuperview()
         }
     }
 
@@ -89,9 +89,9 @@ final class HomeView: UIView {
         dataSource?.supplementaryViewProvider = { collectionView, kind, indexPath in
             guard let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: SectionHeader.identifier,
+                withReuseIdentifier: MusicHeader.identifier,
                 for: indexPath
-            ) as? SectionHeader else { return nil }
+            ) as? MusicHeader else { return nil }
 
             let section = Season.allCases[indexPath.section]
             header.updateHeader(section.sectionTitle, section.sectionDescription)
