@@ -14,4 +14,5 @@ struct Show: Hashable {
     let artworkImageURL: String
     let genre: String
     let releaseDate: Date
+    let detailViewURL: String
 }

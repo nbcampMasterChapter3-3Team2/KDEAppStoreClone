@@ -14,6 +14,7 @@ struct ShowMapper {
         let artist = dto.artistName
         let artworkImageURL = dto.artworkImageURL
         let genre = dto.primaryGenreName
+        let detailViewURL = dto.webViewURL
 
         let isoFormatter = ISO8601DateFormatter()
         guard let date = isoFormatter.date(from: dto.releaseDate) else { return nil }
@@ -24,7 +25,8 @@ struct ShowMapper {
             artist: artist,
             artworkImageURL: artworkImageURL,
             genre: genre,
-            releaseDate: date
+            releaseDate: date,
+            detailViewURL: detailViewURL,
         )
     }
 }
