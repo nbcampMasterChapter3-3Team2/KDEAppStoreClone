@@ -47,20 +47,16 @@ final class SearchResultViewController: UIViewController {
 
     private func bind() {
         searchResultView.didSelectedCell
-            .asDriver(onErrorDriveWith: .empty())
-            .drive(with: self) { owner, index in
-                owner.viewModel.action.accept(.didSelectCell(index))
-            }
+            .map(SearchResultViewModel.Action.didSelectCell)
+            .bind(to: viewModel.action)
             .disposed(by: disposeBag)
 
         viewModel.state.searchKeyword
-            .bind(with: self) { owner, keyword in
-                owner.searchResultView.headerTitle.accept(keyword)
-            }
+            .bind(onNext: searchResultView.headerTitle.accept)
             .disposed(by: disposeBag)
 
         viewModel.state.show
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, shows in
                 owner.searchResultView.updateSnapshot(with: shows, toSection: .show)
@@ -76,10 +72,13 @@ final class SearchResultViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
+        viewModel.state.noDetailView
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(onNext: showAlert)
+            .disposed(by: disposeBag)
+
         searchResultView.didTapHeader
-            .subscribe { [weak self] _ in
-                self?.didTapHeader.accept(())
-            }
+            .bind(to: didTapHeader)
             .disposed(by: disposeBag)
     }
 
@@ -87,5 +86,12 @@ final class SearchResultViewController: UIViewController {
 
     func updateQuery(_ query: String) {
         viewModel.action.accept(.didQueryChanged(query))
+    }
+
+    private func showAlert() {
+        let alert = UIAlertController(title: "알림", message: "상세페이지가 없습니다.", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(confirmAction)
+        present(alert, animated: true)
     }
 }

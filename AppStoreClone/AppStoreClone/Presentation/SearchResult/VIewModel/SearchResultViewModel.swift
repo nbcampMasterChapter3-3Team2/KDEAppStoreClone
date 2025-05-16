@@ -19,6 +19,7 @@ final class SearchResultViewModel: ViewModelProtocol {
         let searchKeyword = BehaviorRelay<String>(value: "")
         let show = BehaviorRelay<[Show]>(value: [])
         let selectedShowURL = PublishRelay<URL>()
+        let noDetailView = PublishRelay<Void>()
     }
 
     // MARK: - Properties
@@ -45,10 +46,7 @@ final class SearchResultViewModel: ViewModelProtocol {
                 setSearchKeyword(for: query)
                 fetchShow(by: query)
             case .didSelectCell(let index):
-                let selectedShow = state.show.value[index]
-                guard let urlString = selectedShow.detailViewURL else { return } // TODO: Alert
-                guard let url = URL(string: urlString) else { return }
-                state.selectedShowURL.accept(url)
+                setSelectedShowURL(for: index)
             }
         }
         .disposed(by: disposeBag)
@@ -65,5 +63,15 @@ final class SearchResultViewModel: ViewModelProtocol {
                 state.show.accept(shows)
             }
             .disposed(by: disposeBag)
+    }
+
+    private func setSelectedShowURL(for index: Int) {
+        let selectedShow = state.show.value[index]
+        guard let urlString = selectedShow.detailViewURL else {
+            state.noDetailView.accept(())
+            return
+        }
+        guard let url = URL(string: urlString) else { return }
+        state.selectedShowURL.accept(url)
     }
 }
