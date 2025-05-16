@@ -22,15 +22,18 @@ final class ITunesService {
         }
 
         return Single.create { observer in
-            Task {
+            let task = URLSession.shared.dataTask(with: url) { data, _, _ in
                 do {
-                    let (data, _) = try await URLSession.shared.data(from: url)
+                    guard let data else { return }
                     let decodedData = try JSONDecoder().decode(SearchResponse<T>.self, from: data)
                     observer(.success(decodedData.results))
                 } catch {
                     observer(.failure(error))
                 }
             }
+
+            task.resume()
+
             return Disposables.create()
         }
     }

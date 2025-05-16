@@ -10,14 +10,21 @@ import RxSwift
 
 final class ImageLoader {
     static let shared = ImageLoader()
+    private var cache = NSCache<NSString, UIImage>()
 
     private init() {}
+
 
     func loadImage(from urlString: String) -> Single<UIImage?> {
         let bigImageURLString = urlString.replacingOccurrences(
             of: "30x30bb.jpg",
             with: "1024x1024bb.jpg"
         )
+
+        if let cachedImage = cache.object(forKey: bigImageURLString as NSString) {
+            return .just(cachedImage)
+        }
+
         guard let url = URL(string: bigImageURLString) else {
             return Single.create { observer in
                 observer(.failure(ImageLoadError.invalidURL))
@@ -26,15 +33,18 @@ final class ImageLoader {
         }
 
         return Single.create { observer in
-            Task {
-                do {
-                    let (data, _ ) = try await URLSession.shared.data(from: url)
-                    let image = UIImage(data: data)
-                    observer(.success(image))
-                } catch {
-                    observer(.failure(error))
+            let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                guard let data else { return }
+                guard let image = UIImage(data: data) else {
+                    observer(.success(nil))
+                    return
                 }
+                self?.cache.setObject(image, forKey: bigImageURLString as NSString)
+                observer(.success(image))
             }
+
+            task.resume()
+
             return Disposables.create()
         }
     }
