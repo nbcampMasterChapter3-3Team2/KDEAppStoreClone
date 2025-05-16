@@ -110,12 +110,20 @@ final class MusicCompactCell: UICollectionViewCell {
         _ artworkImageURL: String?,
         _ album: String?
     ) {
-        guard let artworkImageURL else { return }
-        Task {
-            artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
-        }
+
         songTitleLabel.text = title
         artistLabel.text = artist
         albumLabel.text = album
+        updateImageView(for: artworkImageURL)
+    }
+
+    private func updateImageView(for url: String?) {
+        guard let url else {
+            artworkImageView.image = nil
+            return
+        }
+        Task {
+            artworkImageView.image = await ImageLoader.shared.loadImage(from: url)
+        }
     }
 }

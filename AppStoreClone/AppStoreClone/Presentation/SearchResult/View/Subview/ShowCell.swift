@@ -90,19 +90,29 @@ final class ShowCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageLoadTask?.cancel()
-        updateCell(with: nil, nil, nil, backgroundColor: .clear)
+        updateCell(with: nil, nil, nil, .clear)
         disposeBag = DisposeBag()
     }
 
-    func updateCell(with title: String?, _ showKind: String?, _ artworkImageURL: String?, backgroundColor: UIColor) {
+    func updateCell(
+        with title: String?,
+        _ showKind: String?,
+        _ artworkImageURL: String?,
+        _ backgroundColor: UIColor
+    ) {
         showKindLabel.text = showKind
         titleLabel.text = title
         contentView.backgroundColor = backgroundColor
+        updateImageView(for: artworkImageURL)
+    }
 
-        guard let artworkImageURL else { return }
-        // TODO: Rx 사용
+    private func updateImageView(for url: String?) {
+        guard let url else {
+            artworkImageView.image = nil
+            return
+        }
         imageLoadTask = Task {
-            artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
+            artworkImageView.image = await ImageLoader.shared.loadImage(from: url)
         }
     }
 }
