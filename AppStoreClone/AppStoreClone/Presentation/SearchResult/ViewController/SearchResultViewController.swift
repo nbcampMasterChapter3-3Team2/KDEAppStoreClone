@@ -70,7 +70,9 @@ final class SearchResultViewController: UIViewController {
         viewModel.state.selectedShowURL
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, url in
-                owner.present(DetailViewController(url: url), animated: true)
+                let viewModel = DetailViewModel(webViewURL: url)
+                let viewController = DetailViewController(viewModel: viewModel)
+                owner.present(viewController, animated: true)
             }
             .disposed(by: disposeBag)
 
