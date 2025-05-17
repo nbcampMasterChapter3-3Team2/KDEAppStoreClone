@@ -105,7 +105,6 @@ final class MusicBannerCell: UICollectionViewCell {
             return
         }
         ImageLoader.shared.loadImage(from: url)
-            .asObservable()
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, image in
                 owner.artworkImageView.image = image

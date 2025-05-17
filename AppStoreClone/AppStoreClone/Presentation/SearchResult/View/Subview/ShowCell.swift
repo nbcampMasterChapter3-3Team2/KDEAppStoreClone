@@ -15,7 +15,6 @@ final class ShowCell: UICollectionViewCell {
 
     // MARK: - Properties
 
-    private var imageLoadTask: Task<Void, Never>?
     private var disposeBag = DisposeBag()
 
     // MARK: - UI Components
@@ -90,7 +89,6 @@ final class ShowCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageLoadTask?.cancel()
         updateCell(with: nil, nil, nil, .clear)
         disposeBag = DisposeBag()
     }
@@ -113,7 +111,6 @@ final class ShowCell: UICollectionViewCell {
             return
         }
         ImageLoader.shared.loadImage(from: url)
-            .asObservable()
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, image in
                 owner.artworkImageView.image = image
