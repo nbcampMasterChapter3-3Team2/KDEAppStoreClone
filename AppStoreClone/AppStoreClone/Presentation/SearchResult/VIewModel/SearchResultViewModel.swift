@@ -12,11 +12,14 @@ import RxRelay
 final class SearchResultViewModel: ViewModelProtocol {
     enum Action {
         case didQueryChanged(String)
+        case didSelectCell(Int)
     }
 
     struct State {
         let searchKeyword = BehaviorRelay<String>(value: "")
         let show = BehaviorRelay<[Show]>(value: [])
+        let selectedShowURL = PublishRelay<URL>()
+        let noDetailView = PublishRelay<Void>()
     }
 
     // MARK: - Properties
@@ -37,10 +40,13 @@ final class SearchResultViewModel: ViewModelProtocol {
 
     func bindActions() {
         action.bind { [weak self] action in
+            guard let self else { return }
             switch action {
             case .didQueryChanged(let query):
-                self?.setSearchKeyword(for: query)
-                self?.fetchShow(by: query)
+                setSearchKeyword(for: query)
+                fetchShow(by: query)
+            case .didSelectCell(let index):
+                setSelectedShowURL(for: index)
             }
         }
         .disposed(by: disposeBag)
@@ -53,8 +59,19 @@ final class SearchResultViewModel: ViewModelProtocol {
     private func fetchShow(by query: String) {
         fetchShowUseCase.execute(searchQuery: query)
             .subscribe { [weak self] shows in
-                self?.state.show.accept(shows)
+                guard let self else { return }
+                state.show.accept(shows)
             }
             .disposed(by: disposeBag)
+    }
+
+    private func setSelectedShowURL(for index: Int) {
+        let selectedShow = state.show.value[index]
+        guard let urlString = selectedShow.detailViewURL else {
+            state.noDetailView.accept(())
+            return
+        }
+        guard let url = URL(string: urlString) else { return }
+        state.selectedShowURL.accept(url)
     }
 }

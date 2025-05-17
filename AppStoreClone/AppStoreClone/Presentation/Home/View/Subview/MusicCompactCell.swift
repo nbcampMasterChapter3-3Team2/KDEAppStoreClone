@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 import RxSwift
+import RxCocoa
 
 final class MusicCompactCell: UICollectionViewCell {
 
@@ -110,12 +111,22 @@ final class MusicCompactCell: UICollectionViewCell {
         _ artworkImageURL: String?,
         _ album: String?
     ) {
-        guard let artworkImageURL else { return }
-        Task {
-            artworkImageView.image = await ImageLoader.shared.loadImage(from: artworkImageURL)
-        }
         songTitleLabel.text = title
         artistLabel.text = artist
         albumLabel.text = album
+        updateImageView(for: artworkImageURL)
+    }
+
+    private func updateImageView(for url: String?) {
+        guard let url else {
+            artworkImageView.image = nil
+            return
+        }
+        ImageLoader.shared.loadImage(from: url)
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(with: self) { owner, image in
+                owner.artworkImageView.image = image
+            }
+            .disposed(by: disposeBag)
     }
 }

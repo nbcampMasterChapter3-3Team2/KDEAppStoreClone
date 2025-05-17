@@ -72,6 +72,11 @@ final class HomeViewController: UIViewController {
     private func bind() {
         viewModel.action.accept(.viewDidLoad)
 
+        homeView.didTapCell
+            .map(HomeViewModel.Action.didSelectedSong)
+            .bind(to: viewModel.action)
+            .disposed(by: disposeBag)
+
         viewModel.state.springSong
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, songs in
@@ -97,6 +102,15 @@ final class HomeViewController: UIViewController {
             .asDriver(onErrorDriveWith: .empty())
             .drive(with: self) { owner, songs in
                 owner.homeView.updateSnapshot(with: songs, toSection: .winter)
+            }
+            .disposed(by: disposeBag)
+
+        viewModel.state.selectedSong
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(with: self) { owner, url in
+                let viewModel = DetailViewModel(webViewURL: url)
+                let viewController = DetailViewController(viewModel: viewModel)
+                owner.present(viewController, animated: true)
             }
             .disposed(by: disposeBag)
 

@@ -19,9 +19,9 @@ enum SearchMediaType {
             let limit = season.resultLimit
             return "media=music&entity=song&genreId=51&term=\(searchTerm)&limit=\(limit)"
         case .movie(let searchTerm):
-            return "media=movie&entity=movie&term=\(searchTerm)&limit=5"
+            return "media=movie&entity=movie&term=\(searchTerm)&limit=20"
         case .podcast(let searchTerm):
-            return "media=podcast&entity=podcast&term=\(searchTerm)&limit=5"
+            return "media=podcast&entity=podcast&term=\(searchTerm)&limit=20"
         }
     }
 }

@@ -8,12 +8,16 @@
 import UIKit
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 final class HomeView: UIView {
 
     // MARK: - Properties
 
     private var dataSource: UICollectionViewDiffableDataSource<Season, Song>?
+    let didTapCell = PublishRelay<IndexPath>()
+    private var disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
@@ -45,6 +49,7 @@ final class HomeView: UIView {
         setHierarchy()
         setConstraints()
         setDataSource()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -71,6 +76,15 @@ final class HomeView: UIView {
         collectionView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()
         }
+    }
+
+    // MARK: - Bind
+
+    private func bind() {
+        collectionView.rx.itemSelected
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(onNext: didTapCell.accept)
+            .disposed(by: disposeBag)
     }
 
     // MARK: - DataSource Helper

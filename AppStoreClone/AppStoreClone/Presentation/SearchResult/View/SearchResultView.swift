@@ -15,6 +15,7 @@ final class SearchResultView: UIView {
 
     let headerTitle = BehaviorRelay<String>(value: "")
     let didTapHeader = PublishRelay<Void>()
+    let didSelectedCell = PublishRelay<Int>()
     private let disposeBag = DisposeBag()
     private var dataSource: UICollectionViewDiffableDataSource<SearchResultSection, Show>?
 
@@ -40,6 +41,7 @@ final class SearchResultView: UIView {
         setStyle()
         setHierarchy()
         setConstraints()
+        bind()
         setDataSource()
     }
 
@@ -69,6 +71,16 @@ final class SearchResultView: UIView {
         }
     }
 
+    // MARK: - Bind
+
+    private func bind() {
+        collectionView.rx.itemSelected
+            .subscribe { [weak self] indexPath in
+                self?.didSelectedCell.accept(indexPath.item)
+            }
+            .disposed(by: disposeBag)
+    }
+
     // MARK: - DataSource Helper
 
     private func setDataSource() {
@@ -81,7 +93,7 @@ final class SearchResultView: UIView {
                 ) as! ShowCell
 
                 let kind = show.kind == .movie ? "Movie" : "Podcast"
-                cell.updateCell(with: show.title, kind, show.artworkImageURL, backgroundColor: show.color)
+                cell.updateCell(with: show.title, kind, show.artworkImageURL, show.color)
 
                 return cell
             })
